@@ -1,18 +1,6 @@
-/*
- * MIDIUSB_test.ino
- *
- * Created: 4/6/2015 10:47:08 AM
- * Author: gurbrinder grewal
- * Modified by Arduino LLC (2015)
- */ 
+// En Ableton arranca en C1
 
 #include "MIDIUSB.h"
-
-// First parameter is the event type (0x09 = note on, 0x08 = note off).
-// Second parameter is note-on/note-off, combined with the channel.
-// Channel can be anything between 0-15. Typically reported to the user as 1-16.
-// Third parameter is the note number (48 = middle C).
-// Fourth parameter is the velocity (64 = normal, 127 = fastest).
 
 void noteOn(byte channel, byte pitch, byte velocity) {
   midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
@@ -24,19 +12,17 @@ void noteOff(byte channel, byte pitch, byte velocity) {
   MidiUSB.sendMIDI(noteOff);
 }
 
-void setup() {
-  Serial.begin(115200);
-  pinMode(9, OUTPUT);
-}
-
-// First parameter is the event type (0x0B = control change).
-// Second parameter is the event type, combined with the channel.
-// Third parameter is the control number number (0-119).
-// Fourth parameter is the control value (0-127).
-
 void controlChange(byte channel, byte control, byte value) {
   midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
   MidiUSB.sendMIDI(event);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(0, OUTPUT);
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
 }
 
 void loop() {
@@ -52,14 +38,42 @@ void loop() {
       Serial.println();
 */
       //HACER LO MISMO 
-      if (rx.byte2 == 54){
+      if (rx.byte2 == 36){
         if (rx.header == 8){
-            digitalWrite(9, HIGH); 
+            digitalWrite(0, HIGH); 
         }
         if (rx.header == 9){
-            digitalWrite(9, LOW);
+            digitalWrite(0, LOW);
         }
       }
+      
+      if (rx.byte2 == 37){
+        if (rx.header == 8){
+            digitalWrite(1, HIGH); 
+        }
+        if (rx.header == 9){
+            digitalWrite(1, LOW);
+        }
+      }
+
+      if (rx.byte2 == 38){
+        if (rx.header == 8){
+            digitalWrite(2, HIGH); 
+        }
+        if (rx.header == 9){
+              digitalWrite(2, LOW);
+        }
+      }
+
+      if (rx.byte2 == 39){
+        if (rx.header == 8){
+            digitalWrite(3, HIGH); 
+        }
+        if (rx.header == 9){
+            digitalWrite(3, LOW);
+        }
+      }
+
     }
   } while (rx.header != 0);
 }
